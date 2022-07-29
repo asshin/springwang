@@ -1,5 +1,7 @@
 package com.wang.springframework.core.io;
 
+import com.wang.springframework.beans.Util.ClassUtil;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +17,7 @@ public class ClassPathResource implements Resource{
 //        Assert.notNull(path, "Path must not be null");
         this.Path = path;
 
-        this.classLoader = classLoader;
+        this.classLoader = (classLoader != null ? classLoader : ClassUtil.getDefaultClassLoader());
     }
 
 

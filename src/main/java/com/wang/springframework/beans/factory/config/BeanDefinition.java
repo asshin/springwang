@@ -14,6 +14,10 @@ public class BeanDefinition<T> {
         this.propertyValues = propertyValues;
     }
 
+    public BeanDefinition(Class<T> aClass) {
+        this.aClass = aClass;
+    }
+
     public BeanDefinition(Class<T> aClass, PropertyValues propertyValues) {
         this.aClass = aClass;
         this.propertyValues = propertyValues != null ? propertyValues : new PropertyValues();
