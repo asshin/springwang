@@ -1,7 +1,6 @@
 package com.wang.springframework.beans.factory.support;
 
 import com.wang.springframework.BeanUtil.beanUtil;
-import com.wang.springframework.beans.factory.AbstractBeanFactory;
 import com.wang.springframework.beans.factory.PropertyValue;
 import com.wang.springframework.beans.factory.PropertyValues;
 import com.wang.springframework.beans.factory.config.BeanDefinition;

@@ -1,13 +1,7 @@
 package com.wang.springframework.test;
 
-import com.sun.xml.internal.ws.api.server.ServiceDefinition;
 import com.wang.springframework.bean.User;
-import com.wang.springframework.beans.factory.PropertyValue;
-import com.wang.springframework.beans.factory.PropertyValues;
-import com.wang.springframework.beans.factory.config.BeanDefinition;
-import com.wang.springframework.beans.factory.BeanFactory1;
 import com.wang.springframework.bean.UserService;
-import com.wang.springframework.beans.factory.config.BeanReference;
 import com.wang.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.wang.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import com.wang.springframework.core.io.DefaultResourceLoader;

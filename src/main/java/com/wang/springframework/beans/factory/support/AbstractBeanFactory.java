@@ -1,5 +1,6 @@
-package com.wang.springframework.beans.factory;
+package com.wang.springframework.beans.factory.support;
 
+import com.wang.springframework.beans.factory.BeanFactory;
 import com.wang.springframework.beans.factory.config.BeanDefinition;
 import com.wang.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
 
