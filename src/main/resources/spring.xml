@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="user" class="com.wang.springframework.bean.User"/>
+    <bean id="userService" class="com.wang.springframework.bean.UserService">
+        <property name="name" value="wang"/>
+        <property name="age" value="22"/>
+        <property name="user" ref="user"/>
+    </bean>
+</beans>
