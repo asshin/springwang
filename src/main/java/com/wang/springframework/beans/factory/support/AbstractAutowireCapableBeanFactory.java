@@ -51,9 +51,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                         if(value instanceof  BeanReference){
                             BeanReference beanReference= (BeanReference)value;
 
-                            value=getBean( beanReference.getBeanName());
-                            beanUtil.setField(bean,name,value);
+                            value=getBean(beanReference.getBeanName());
+
                         }
+                        beanUtil.setField(bean,name,value);
                     }
                 }
 

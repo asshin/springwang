@@ -37,7 +37,9 @@ public class ApiTest {
         xmlBeanDefinitionReader.loadDefinitions("classpath:spring.xml");
         User user = (User)defaultListableBeanFactory.getBean("user");
         user.sayhello();
+
         UserService userService =(UserService) defaultListableBeanFactory.getBean("userService");
+        userService.getUser().sayhello();
         System.out.println(userService.toString());
 
     }
