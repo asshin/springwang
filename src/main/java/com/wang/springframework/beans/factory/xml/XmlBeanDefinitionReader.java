@@ -3,6 +3,7 @@ package com.wang.springframework.beans.factory.xml;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.XmlUtil;
+import com.wang.springframework.beans.BeansException;
 import com.wang.springframework.beans.factory.PropertyValue;
 import com.wang.springframework.beans.factory.PropertyValues;
 import com.wang.springframework.beans.factory.config.BeanDefinition;
@@ -59,6 +60,12 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             doLoadDefinitions(inputStream);
         }catch (IOException e){
             e.printStackTrace();
+        }
+    }
+
+    public void loadDefinitions(String[] configLocation){
+        for (String s : configLocation) {
+            loadDefinitions(s);
         }
     }
     public void doLoadDefinitions(InputStream inputStream)   {

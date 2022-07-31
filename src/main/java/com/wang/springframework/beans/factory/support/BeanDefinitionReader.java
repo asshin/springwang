@@ -1,5 +1,6 @@
 package com.wang.springframework.beans.factory.support;
 
+import com.wang.springframework.beans.BeansException;
 import com.wang.springframework.core.io.Resource;
 import com.wang.springframework.core.io.ResourceLoader;
 
@@ -13,5 +14,6 @@ public interface BeanDefinitionReader {
    void loadDefinitions(Resource resource);
    void loadDefinitions(Resource... resources);
    void loadDefinitions(String location);
+   void loadDefinitions(String[] configLocation);
 
 }

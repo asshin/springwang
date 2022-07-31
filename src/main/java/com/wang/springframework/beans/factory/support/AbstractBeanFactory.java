@@ -2,15 +2,25 @@ package com.wang.springframework.beans.factory.support;
 
 import com.wang.springframework.beans.factory.BeanFactory;
 import com.wang.springframework.beans.factory.config.BeanDefinition;
+import com.wang.springframework.beans.factory.config.BeanPostProcessor;
+import com.wang.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.wang.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zsw
  * @create 2022-07-28 15:11
  */
-public abstract  class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
+public abstract  class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
-   public Object getBean(String BeanName){
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return beanPostProcessors;
+    }
+
+    public Object getBean(String BeanName){
        Object bean=getSingleton(BeanName);
        if (bean!=null){
            return  bean;
@@ -33,6 +43,10 @@ public abstract  class AbstractBeanFactory extends DefaultSingletonBeanRegistry 
         BeanDefinition beanDefinition=getBeanDefinition(BeanName);
         bean=creatBean(BeanName,beanDefinition,args);
         return bean;
+    }
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        this.beanPostProcessors.remove(beanPostProcessor);
+        this.beanPostProcessors.add(beanPostProcessor);
     }
     public abstract BeanDefinition getBeanDefinition(String name);
     public abstract Object creatBean(String name,BeanDefinition beanDefinition,Object[] args);

@@ -3,21 +3,26 @@ package com.wang.springframework.beans.factory.support;
 import com.wang.springframework.BeanUtil.beanUtil;
 import com.wang.springframework.beans.factory.PropertyValue;
 import com.wang.springframework.beans.factory.PropertyValues;
+import com.wang.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import com.wang.springframework.beans.factory.config.BeanDefinition;
+import com.wang.springframework.beans.factory.config.BeanPostProcessor;
 import com.wang.springframework.beans.factory.config.BeanReference;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 /**
  * @author zsw
  * @create 2022-07-28 15:30
  */
-public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
+public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
     private  simpleInstantiationStragegy simpleInstantiationStragegy=new simpleInstantiationStragegy();
     public  Object creatBean(String name, BeanDefinition beanDefinition,Object[] args){
-        Object createBeanInstance = createbeaninstance(name, beanDefinition, args);
-           applyPropertyValues(name,beanDefinition,createBeanInstance);
-        return createBeanInstance;
+             Object createBeanInstance = createbeaninstance(name, beanDefinition, args);
+                applyPropertyValues(name,beanDefinition,createBeanInstance);
+        Object bean = initializedBean(name, createBeanInstance, beanDefinition);
+        addSingleton(name, bean);
+        return bean;
 
     }
 
@@ -35,8 +40,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+        if (beanDefinition.isSingleton()){
+            addSingleton(name,instance);
+        }
 
-        addSingleton(name,instance);
         return instance;
     }
         public void applyPropertyValues(String beanName,BeanDefinition beanDefinition,Object bean)  {
@@ -65,5 +72,53 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 
         }
+
+    public simpleInstantiationStragegy getSimpleInstantiationStragegy() {
+        return simpleInstantiationStragegy;
+    }
+
+    public void setSimpleInstantiationStragegy(simpleInstantiationStragegy simpleInstantiationStragegy) {
+        this.simpleInstantiationStragegy = simpleInstantiationStragegy;
+    }
+
+    public Object initializedBean(String beanName, Object bean, BeanDefinition beanDefinition){
+//1.执行BeanPostProcessor Before处理
+        Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
+     //待完成任务：invokeInitMethod(beanName,wrappedBean,beanDefinition),初始化
+        invokeInitMethods(beanName,wrappedBean,beanDefinition);
+     //2.执行BeanPostProcessorsAfter
+        wrappedBean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        return wrappedBean;
+    }
+
+
+   public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) {
+       Object result=existingBean;
+       List<BeanPostProcessor> beanPostProcessors = getBeanPostProcessors();
+       for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+           Object cur = beanPostProcessor.postProcessBeforeInitialization(result, beanName);
+           if(cur==null)return result;
+           result=cur;//满足条件的beanPostProcessor会改变result的值，其他的不改变。
+
+       }
+
+       return result;
+    }
+    private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) {
+
+    }
+
+    public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName){
+        Object result=existingBean;
+        List<BeanPostProcessor> beanPostProcessors = getBeanPostProcessors();
+        for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+            Object cur = beanPostProcessor.postProcessAfterInitialization(result, beanName);
+            if(cur==null)return result;
+            result=cur;//满足条件的beanPostProcessor会改变result的值，其他的不改变。
+
+        }
+        return result;
+    }
+
 
 }

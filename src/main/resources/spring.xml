@@ -6,4 +6,5 @@
         <property name="age" value="22"/>
         <property name="user" ref="user"/>
     </bean>
+    <bean class="com.wang.springframework.PostProcessor.MyPostProcessor"></bean>
 </beans>
