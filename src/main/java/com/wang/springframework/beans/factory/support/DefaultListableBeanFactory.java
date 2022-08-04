@@ -35,7 +35,11 @@ public class DefaultListableBeanFactory extends  AbstractAutowireCapableBeanFact
         beanDefinitionMap.forEach((beanName, beanDefinition) -> {
             Class beanClass = beanDefinition.getaClass();
             if (type.isAssignableFrom(beanClass)) {
-                result.put(beanName, (T) getBean(beanName));
+                try {
+                    result.put(beanName, (T) getBean(beanName));
+                } catch (BeansException e) {
+                    e.printStackTrace();
+                }
             }
         });
         return result;
@@ -55,6 +59,16 @@ public class DefaultListableBeanFactory extends  AbstractAutowireCapableBeanFact
 
     @Override
     public void preInstantiateSingletons()  {
-        beanDefinitionMap.keySet().forEach(this::getBean);
+//        beanDefinitionMap.keySet().forEach(this::getBean);
+    }
+
+    @Override
+    protected void registerDisposableBeanIfNecessary() {
+
+    }
+
+    @Override
+    public void destroySingletons() {
+
     }
 }

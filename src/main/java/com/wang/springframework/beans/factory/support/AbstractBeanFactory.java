@@ -1,5 +1,6 @@
 package com.wang.springframework.beans.factory.support;
 
+import com.wang.springframework.beans.BeansException;
 import com.wang.springframework.beans.factory.BeanFactory;
 import com.wang.springframework.beans.factory.config.BeanDefinition;
 import com.wang.springframework.beans.factory.config.BeanPostProcessor;
@@ -20,7 +21,7 @@ public abstract  class AbstractBeanFactory extends DefaultSingletonBeanRegistry 
         return beanPostProcessors;
     }
 
-    public Object getBean(String BeanName){
+    public Object getBean(String BeanName) throws BeansException {
        Object bean=getSingleton(BeanName);
        if (bean!=null){
            return  bean;
@@ -32,7 +33,7 @@ public abstract  class AbstractBeanFactory extends DefaultSingletonBeanRegistry 
         bean=creatBean(BeanName,beanDefinition,null);
         return bean;
     }
-    public Object getBean(String BeanName,Object[] args){
+    public Object getBean(String BeanName,Object[] args) throws BeansException {
         Object bean=getSingleton(BeanName);
         if (bean!=null){
             return  bean;
@@ -49,5 +50,5 @@ public abstract  class AbstractBeanFactory extends DefaultSingletonBeanRegistry 
         this.beanPostProcessors.add(beanPostProcessor);
     }
     public abstract BeanDefinition getBeanDefinition(String name);
-    public abstract Object creatBean(String name,BeanDefinition beanDefinition,Object[] args);
+    public abstract Object creatBean(String name,BeanDefinition beanDefinition,Object[] args) throws BeansException;
 }

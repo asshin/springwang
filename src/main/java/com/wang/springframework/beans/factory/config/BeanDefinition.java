@@ -11,6 +11,8 @@ public class BeanDefinition<T> {
 
     String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;
     Class<T> aClass;
+    String initMethodName;
+    String destroyMethodName;
     PropertyValues propertyValues;
     private String scope = SCOPE_SINGLETON;
 

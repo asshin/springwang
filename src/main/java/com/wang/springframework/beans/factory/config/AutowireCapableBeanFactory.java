@@ -9,7 +9,7 @@ import com.wang.springframework.beans.factory.BeanFactory;
  * 是一个自动化处理Bean工厂配置的接口，
  */
 public interface AutowireCapableBeanFactory extends BeanFactory {
-    Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) ;
+    Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException;
 
     /**
      * 执行 BeanPostProcessors 接口实现类的 postProcessorsAfterInitialization 方法

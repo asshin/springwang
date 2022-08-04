@@ -1,8 +1,8 @@
 package com.wang.springframework.beans.factory.support;
 
 import com.wang.springframework.BeanUtil.beanUtil;
-import com.wang.springframework.beans.factory.PropertyValue;
-import com.wang.springframework.beans.factory.PropertyValues;
+import com.wang.springframework.beans.BeansException;
+import com.wang.springframework.beans.factory.*;
 import com.wang.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import com.wang.springframework.beans.factory.config.BeanDefinition;
 import com.wang.springframework.beans.factory.config.BeanPostProcessor;
@@ -17,9 +17,9 @@ import java.util.List;
  */
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
     private  simpleInstantiationStragegy simpleInstantiationStragegy=new simpleInstantiationStragegy();
-    public  Object creatBean(String name, BeanDefinition beanDefinition,Object[] args){
+    public  Object creatBean(String name, BeanDefinition beanDefinition,Object[] args) throws BeansException {
              Object createBeanInstance = createbeaninstance(name, beanDefinition, args);
-                applyPropertyValues(name,beanDefinition,createBeanInstance);
+             applyPropertyValues(name,beanDefinition,createBeanInstance);
         Object bean = initializedBean(name, createBeanInstance, beanDefinition);
         addSingleton(name, bean);
         return bean;
@@ -68,6 +68,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            } catch (BeansException e) {
+                e.printStackTrace();
             }
 
 
@@ -81,8 +83,21 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         this.simpleInstantiationStragegy = simpleInstantiationStragegy;
     }
 
-    public Object initializedBean(String beanName, Object bean, BeanDefinition beanDefinition){
-//1.执行BeanPostProcessor Before处理
+    public Object initializedBean(String beanName, Object bean, BeanDefinition beanDefinition) throws BeansException {
+        //invokeAwareMethods
+        if(bean instanceof Aware){
+            if(bean instanceof BeanFactoryAware){
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+            }
+            if(bean instanceof BeanClassLoaderAware){
+                ((BeanClassLoaderAware) bean).setBeanClassLoader(Thread.currentThread().getContextClassLoader());
+            }
+            if(bean instanceof  BeanNameAware){
+                ((BeanNameAware) bean).setBeanNameAware(beanName);
+            }
+        }
+
+        //1.执行BeanPostProcessor Before处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
      //待完成任务：invokeInitMethod(beanName,wrappedBean,beanDefinition),初始化
         invokeInitMethods(beanName,wrappedBean,beanDefinition);
@@ -92,7 +107,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
 
-   public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) {
+   public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException {
        Object result=existingBean;
        List<BeanPostProcessor> beanPostProcessors = getBeanPostProcessors();
        for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
@@ -107,6 +122,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) {
 
     }
+    protected abstract void registerDisposableBeanIfNecessary();
+
 
     public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName){
         Object result=existingBean;
@@ -119,6 +136,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
         return result;
     }
+
 
 
 }

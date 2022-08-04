@@ -1,9 +1,12 @@
 package com.wang.springframework.context.support;
 
 import com.wang.springframework.beans.BeansException;
+import com.wang.springframework.beans.factory.ApplicationContextAware;
 import com.wang.springframework.beans.factory.BeanFactory;
 import com.wang.springframework.beans.factory.ConfigurableListableBeanFactory;
 import com.wang.springframework.beans.factory.config.BeanPostProcessor;
+
+import com.wang.springframework.beans.factory.support.ApplicationContextAwareProcessor;
 import com.wang.springframework.context.ConfigurableApplicationContext;
 import com.wang.springframework.core.io.DefaultResourceLoader;
 
@@ -21,6 +24,8 @@ public abstract class  AbstractApplicationContext extends DefaultResourceLoader 
         refreshBeanFactory();
   //2.获取BeanFactory
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+        //2.1 添加applicaContextAwareProcessor，让继承该接口的bean都能感知自己的applicationcontext
+        beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
    //3.在Bean实例化之前，执行BeanFactoryPostprocessor
         invokeBeanFactoryPostProcessors(beanFactory);
     //4.BeanPostProcessor需要提前于其他Bean对象实例化之前执行注册操作
@@ -35,8 +40,8 @@ public abstract class  AbstractApplicationContext extends DefaultResourceLoader 
     }
 
     public abstract String getBeanDefinitionName();
-    public abstract Object getBean(String name);
-    public abstract Object getBean(String name,Object... args);
+    public abstract Object getBean(String name) throws BeansException;
+    public abstract Object getBean(String name,Object... args) throws BeansException;
 
     public  void registerBeanPostProcessor(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 
@@ -49,5 +54,9 @@ public abstract class  AbstractApplicationContext extends DefaultResourceLoader 
     }
 
 
+  public void registerShutdownHook(){
 
+    }
+   public void close(){
+    }
 }

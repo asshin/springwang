@@ -40,13 +40,13 @@ public class ClassPathXmlApplicationContext  extends AbstractXmlApplicationConte
     }
 
     @Override
-    public Object getBean(String name) {
+    public Object getBean(String name) throws BeansException {
         Object bean = getBeanFactory().getBean(name);
         return bean;
     }
 
     @Override
-    public Object getBean(String name, Object... args) {
+    public Object getBean(String name, Object... args) throws BeansException {
         Object bean = getBeanFactory().getBean(name,args);
         return bean;
     }
