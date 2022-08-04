@@ -37,9 +37,15 @@ public class ApiTest {
 //        userService.getUser().sayhello();
 //        System.out.println(userService.toString());
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
-        UserService user = (UserService)classPathXmlApplicationContext.getBean("userService");
-        System.out.println("beanName is :"+user.getBeanName());
-        System.out.println("appc  is :"+user.getApplicationContext());
+//        UserService user = (UserService)classPathXmlApplicationContext.getBean("userService");
+//        UserService user1 = (UserService)classPathXmlApplicationContext.getBean("userService");
+//        UserService user2 = (UserService)classPathXmlApplicationContext.getBean("userService");
+//        System.out.println(user==user2);
+//        System.out.println(user1);
+//        System.out.println(user2);
+        Object userFactoryBean = classPathXmlApplicationContext.getBean("userFactoryBean");
+        Object userFactoryBean2 = classPathXmlApplicationContext.getBean("userFactoryBean");
+        System.out.println(userFactoryBean==userFactoryBean2);
 
 
     }

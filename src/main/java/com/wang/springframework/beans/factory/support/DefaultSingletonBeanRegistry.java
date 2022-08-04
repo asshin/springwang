@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     private  ConcurrentHashMap singletonMap;
+           Object NULL_OBJECT;
     public DefaultSingletonBeanRegistry() {
         singletonMap=new ConcurrentHashMap<String,Object>();
     }

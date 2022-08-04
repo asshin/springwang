@@ -81,6 +81,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             String id = bean.getAttribute("id");
             String name = bean.getAttribute("name");
             String aClass = bean.getAttribute("class");
+            String initMethod = bean.getAttribute("init-method");
+            String scope = bean.getAttribute("scope");
             Class<?> clazz = null;
             try {
                 clazz = Class.forName(aClass);
@@ -92,9 +94,18 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             if (StrUtil.isEmpty(beanName)){
                 beanName=StrUtil.lowerFirst(clazz.getSimpleName());
             }
+
+
             NodeList childNodes1 = bean.getChildNodes();
             //定义bean
             BeanDefinition beanDefinition =new BeanDefinition(clazz);
+            //设置scope
+            if (StrUtil.isNotEmpty(initMethod)){
+                beanDefinition.setInitMethodName(initMethod);
+            }
+            if (StrUtil.isNotEmpty(scope)){
+                beanDefinition.setScope(scope);
+            }
             //读取属性并注入
             NodeList propertys = bean.getChildNodes();
             PropertyValues propertyValues = new PropertyValues();
@@ -112,6 +123,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 propertyValues.addPropertyValue(propertyValue);
             }
             beanDefinition.setPropertyValues(propertyValues);
+
+
             //注册beandefinition
            getRegistry().RegistryBeanDefinition(beanName,beanDefinition);
         }
